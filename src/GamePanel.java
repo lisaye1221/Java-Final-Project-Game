@@ -16,12 +16,22 @@ class GamePanel extends JPanel implements Runnable {
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
 
+    int FPS = 60;
+
+    KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+
+    // set player's default position
+    int playerX = 100;
+    int playerY = 100;
+    int playerSpeed = 4;
 
     public GamePanel() {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         setBackground(Color.WHITE);
         setDoubleBuffered(true); // for better rendering performance
+        this.addKeyListener(keyHandler);
+        this.setFocusable(true); // allow to be panel to be focused to get key input
     }
 
     public void startGameThread() {
@@ -32,16 +42,47 @@ class GamePanel extends JPanel implements Runnable {
     @Override
     // The game loop
     public void run() {
+
+        // 1/60 sec
+        double drawInterval = 1000000000 / FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
         while (gameThread != null) {
-            // System.out.println("game is running");
-            // 1. UPDATE: update information
-            UPDATE();
-            // 2. DRAW: draw gui and graphics
-            repaint();
+
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            lastTime = currentTime;
+
+            if(delta >= 1) {
+                // 1. UPDATE: update information
+                UPDATE();
+                // 2. DRAW: draw gui and graphics
+                repaint();
+                delta--;
+            }
+
         }
     }
 
     public void UPDATE(){
+
+        // update player position
+        if(keyHandler.upPressed) {
+            playerY -= playerSpeed;
+        }
+        else if(keyHandler.downPressed){
+            playerY += playerSpeed;
+        }
+        else if(keyHandler.rightPressed){
+            playerX += playerSpeed;
+        }
+        else if(keyHandler.leftPressed){
+            playerX -= playerSpeed;
+        }
+
+
 
     }
 
@@ -49,6 +90,12 @@ class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        // left off at video #2 , time stamp 6:16
+
+        g2.setColor(Color.black);
+        g2.fillRect(playerX,playerY, tileSize, tileSize);
+
+        // when drawing is done, dispose to save memory
+        g2.dispose();
+
     }
 }
