@@ -1,9 +1,10 @@
+
 // Lisa Ye
 // A Simple Journey
-// Main class: run this class to start the game
+// main.Main class: run this class to start the game
 
+package main;
 import javax.swing.*;
-import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {

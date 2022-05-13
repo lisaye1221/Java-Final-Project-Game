@@ -1,10 +1,11 @@
 
-// GamePanel
+// main.GamePanel
 
+package main;
 import javax.swing.*;
 import java.awt.*;
 
-class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JPanel implements Runnable {
 
     // Screen settings
     final int originalTileSize = 16; // 16 x 16 tile
