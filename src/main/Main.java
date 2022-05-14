@@ -12,7 +12,6 @@ public class Main {
         JFrame window = new JFrame("A Simple Journey");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
         window.pack(); // make window size same as panel

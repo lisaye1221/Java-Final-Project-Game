@@ -5,6 +5,11 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, confirmPressed, cancelPressed;
+    GamePanel gp;
+
+    public KeyHandler(GamePanel gp){
+        this.gp = gp;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -13,23 +18,48 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if(key == KeyEvent.VK_UP) {
-            upPressed = true;
+
+        if(gp.gameState == GamePanel.GameState.TITLE){
+            if (key == KeyEvent.VK_UP) {
+                gp.ui.titleOptionPos--;
+                if(gp.ui.titleOptionPos < 0) {
+                    gp.ui.titleOptionPos = 1;
+                }
+            }
+            if (key == KeyEvent.VK_DOWN) {
+                gp.ui.titleOptionPos++;
+                gp.ui.titleOptionPos %= 2;
+            }
+            if (key == KeyEvent.VK_ENTER) {
+                // new game
+                if(gp.ui.titleOptionPos == 0){
+                    gp.gameState = GamePanel.GameState.GAME_PLAY;
+                }
+                // load game
+                else{
+                    // add later
+                }
+            }
         }
-        if(key == KeyEvent.VK_DOWN) {
-            downPressed = true;
-        }
-        if(key == KeyEvent.VK_LEFT) {
-            leftPressed = true;
-        }
-        if(key == KeyEvent.VK_RIGHT) {
-            rightPressed = true;
-        }
-        if(key == KeyEvent.VK_Z){
-            confirmPressed = true;
-        }
-        if(key == KeyEvent.VK_X){
-            cancelPressed = true;
+        else if(gp.gameState == GamePanel.GameState.GAME_PLAY) {
+            if (key == KeyEvent.VK_UP) {
+                upPressed = true;
+            }
+            if (key == KeyEvent.VK_DOWN) {
+                downPressed = true;
+            }
+            if (key == KeyEvent.VK_LEFT) {
+                leftPressed = true;
+            }
+            if (key == KeyEvent.VK_RIGHT) {
+                rightPressed = true;
+            }
+            if (key == KeyEvent.VK_Z) {
+                confirmPressed = true;
+            }
+            if (key == KeyEvent.VK_X) {
+                cancelPressed = true;
+            }
         }
 
     }

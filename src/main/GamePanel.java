@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
+    public enum GameState{
+        TITLE, GAME_PLAY, GAME_OVER
+    }
 
     // Screen settings
     final int originalTileSize = 16; // 16 x 16 tile
@@ -31,8 +34,9 @@ public class GamePanel extends JPanel implements Runnable {
     private Ground groundGraphics = new Ground(this);
 
     // Game Logic Managers
-    KeyHandler keyHandler = new KeyHandler();
+    KeyHandler keyHandler = new KeyHandler(this);
     EncounterManager encounterManager = new EncounterManager(this);
+    UI ui = new UI(this);
 
     // player
     public final int PLAYER_X = 100;
@@ -42,6 +46,8 @@ public class GamePanel extends JPanel implements Runnable {
     public double timer = 0;
     public int groundScrollSpeed = GROUND_SCROLL_SPEED;
     public boolean isPaused = false;
+    public GameState gameState;
+
 
 
     public GamePanel() {
@@ -52,9 +58,14 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true); // allow to be panel to be focused to get key input
     }
 
+    private void setupGame(){
+        gameState = GameState.TITLE;
+    }
+
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+        setupGame();
     }
 
     @Override
@@ -91,29 +102,30 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void UPDATE(){
 
-        groundGraphics.update();
-        encounterManager.update();
-        player.update();
+        if(gameState == GameState.GAME_PLAY) {
+            groundGraphics.update();
+            encounterManager.update();
+            player.update();
 
-        // press X to unpause game(for testing)
-        if(keyHandler.cancelPressed){
-            encounterManager.hasPlayerInteracted = true;
-            encounterManager.shouldSpawnEncounter = true;
-            isPaused = false;
+            // press X to unpause game(for testing)
+            if (keyHandler.cancelPressed) {
+                encounterManager.hasPlayerInteracted = true;
+                encounterManager.shouldSpawnEncounter = true;
+                isPaused = false;
 
-            player.direction = Entity.Direction.RIGHT;
-        }
+                player.direction = Entity.Direction.RIGHT;
+            }
 
-        if(encounterManager.xForCollisionDetection <= PLAYER_X && !encounterManager.hasPlayerInteracted){
-            isPaused = true;
-            player.direction = Entity.Direction.UP;
-        }
-        if(isPaused){
-            groundScrollSpeed = 0;
-        }
-        else{
-            groundScrollSpeed = GROUND_SCROLL_SPEED;
-        }
+            if (encounterManager.xForCollisionDetection <= PLAYER_X && !encounterManager.hasPlayerInteracted) {
+                isPaused = true;
+                player.direction = Entity.Direction.UP;
+            }
+            if (isPaused) {
+                groundScrollSpeed = 0;
+            } else {
+                groundScrollSpeed = GROUND_SCROLL_SPEED;
+            }
+        } // end of GAME_PLAY
 
     }
 
@@ -122,12 +134,17 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // tileManager.draw(g2);
-        groundGraphics.draw(g2);
-        encounterManager.draw(g2);
-        player.draw(g2);
-        // GUI
-        g2.drawString(Integer.toString((int)timer), 10, 10);
+        // Title
+        if(gameState == GameState.TITLE){
+            ui.draw(g2);
+        }
+        else{
+            groundGraphics.draw(g2);
+            encounterManager.draw(g2);
+            player.draw(g2);
+            // GUI
+            g2.drawString(Integer.toString((int)timer), 10, 10);
+        }
 
         // when drawing is done, dispose to save memory
         g2.dispose();
