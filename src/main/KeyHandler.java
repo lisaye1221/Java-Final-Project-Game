@@ -60,6 +60,10 @@ public class KeyHandler implements KeyListener {
             if (key == KeyEvent.VK_X) {
                 cancelPressed = true;
             }
+            // for testing
+            if (key == KeyEvent.VK_S) {
+               gp.saveGame();
+            }
         }
 
     }

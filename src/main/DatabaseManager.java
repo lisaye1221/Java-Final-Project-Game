@@ -35,12 +35,12 @@ public class DatabaseManager {
         }
     }
 
-    private String getSaveFileNameFromDatabase(String username, String PIN){
+    public String getSaveFileNameFromDatabase(String username, String PIN){
         String result = "";
         return result;
     }
 
-    private void saveGameToDatabase(String username, String PIN){
+    public void saveGameToDatabase(String username, String PIN){
 
     }
 

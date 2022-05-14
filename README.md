@@ -3,6 +3,7 @@
 
 ## Credits
 - Tutorial by @RyiSnow on Java 2D Games
+- [Login pop up tutorial](https://www.zentut.com/java-swing/simple-login-dialog/)
 
 ### Assets
 

@@ -9,6 +9,9 @@ import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 
 public class GamePanel extends JPanel implements Runnable {
     public enum GameState{
@@ -16,6 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     // Screen settings
+    final JFrame ownerJF;
     final int originalTileSize = 16; // 16 x 16 tile
     final int scale = 3; // to scale the tile since our computer resolution is high
     final int tileSize = originalTileSize * scale; // 48 x 48 tile
@@ -44,14 +48,18 @@ public class GamePanel extends JPanel implements Runnable {
     Player player = new Player(this, keyHandler);
 
     // game data
-    public double timer = 0;
+    private String username = null;
+    private String PIN = null;
     public int groundScrollSpeed = GROUND_SCROLL_SPEED;
     public boolean isPaused = false;
     public GameState gameState;
+    // game stats
+    public double timer = 0;
+    public int gold = 0;
+    public int hunger = 100;
 
-
-
-    public GamePanel() {
+    public GamePanel(JFrame jf) {
+        this.ownerJF = jf;
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         setBackground(new Color(145,240,255));
         setDoubleBuffered(true); // for better rendering performance
@@ -171,13 +179,52 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize(){
         return tileSize;
     }
+    public void setUsername(String username){
+        this.username = username;
+    }
+    public void setPIN(String PIN){
+        this.PIN = PIN;
+    }
 
     public void saveGame(){
-
+        String saveFileName;
+        // if new game(don't know username)
+        if(username == null && PIN == null) {
+            // TODO: pause game
+            // ask for username and PIN
+            askForInfo();
+            // create file, save data to file
+            saveFileName = username + PIN;
+            //TODO: add entry to database
+        }
+        // not new game
+        else {
+            // get filename from database
+            saveFileName = databaseManager.getSaveFileNameFromDatabase(username, PIN);
+        }
+        // will create new save file or overwrite existing one
+        saveToSaveFile(saveFileName);
     }
 
     public void loadGame(){
         String username = "lisa";
         String PIN = "1234";
     }
+
+    public void askForInfo(){
+        InfoDialog infoDialog = new InfoDialog(ownerJF, this);
+        infoDialog.setVisible(true);
+    }
+
+    private void saveToSaveFile(String fileName){
+        try {
+            PrintStream fout = new PrintStream("./saves/" + fileName + ".txt");
+            fout.println("score " + (int) timer);
+            fout.println("gold " + gold);
+            fout.println("hunger " + hunger);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
