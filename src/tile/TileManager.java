@@ -30,10 +30,10 @@ public class TileManager {
 
     public void draw(Graphics2D g2){
 
-        g2.drawImage(tile[0].image,0,0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[0].image,gp.tileSize,0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image,0,gp.tileSize, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image,gp.tileSize,gp.tileSize, gp.tileSize, gp.tileSize, null);
+        for(int i = 0; i < gp.getMaxScreenCol(); i++){
+            g2.drawImage(tile[0].image,(gp.getTileSize() * i),gp.getTileSize() * (gp.getMaxScreenRow()-2), gp.getTileSize(), gp.getTileSize(), null);
+            g2.drawImage(tile[1].image,(gp.getTileSize() * i),gp.getTileSize() * (gp.getMaxScreenRow()-1), gp.getTileSize(), gp.getTileSize(), null);
+        }
 
     }
 

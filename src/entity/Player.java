@@ -22,8 +22,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        x = 80;
+        y = (gp.getMaxScreenRow()-3) * gp.getTileSize();
         speed = 4;
         direction = Direction.RIGHT;
     }
@@ -83,7 +83,7 @@ public class Player extends Entity {
         }
 
         // draw the sprite
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
 
     }
 

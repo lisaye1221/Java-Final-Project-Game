@@ -3,6 +3,7 @@
 
 package main;
 import entity.Player;
+import graphicObject.Ground;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Screen settings
     final int originalTileSize = 16; // 16 x 16 tile
     final int scale = 3; // to scale the tile since our computer resolution is high
-    public final int tileSize = originalTileSize * scale; // 48 x 48 tile
+    final int tileSize = originalTileSize * scale; // 48 x 48 tile
 
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
@@ -22,12 +23,15 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
 
-    TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
 
     // player
     Player player = new Player(this, keyHandler);
+
+    // graphics
+    TileManager tileManager = new TileManager(this);
+    Ground groundGraphics = new Ground(this);
 
     public GamePanel() {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -71,6 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void UPDATE(){
 
+        groundGraphics.update();
         player.update();
 
     }
@@ -80,10 +85,31 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.draw(g2);
+        // tileManager.draw(g2);
+        groundGraphics.draw(g2);
         player.draw(g2);
         // when drawing is done, dispose to save memory
         g2.dispose();
 
+    }
+
+    // getters
+    public int getMaxScreenCol() {
+        return maxScreenCol;
+    }
+    public int getMaxScreenRow() {
+        return maxScreenRow;
+    }
+    public int getScreenWidth(){
+        return screenWidth;
+    }
+    public int getScreenHeight(){
+        return screenHeight;
+    }
+    public int getScale(){
+        return scale;
+    }
+    public int getTileSize(){
+        return tileSize;
     }
 }
