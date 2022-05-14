@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Ground {
 
@@ -26,8 +27,10 @@ public class Ground {
     private BufferedImage ground;
     private BufferedImage groundDecorGrass, groundDecorFlower;
     int groundScrollSpeed = 1;
+    private Random random;
 
     public Ground(GamePanel gp) {
+        random = new Random();
         this.gp = gp;
         getGroundImage();
         groundImageList = new ArrayList<>();
@@ -44,7 +47,7 @@ public class Ground {
         int numDecorTile = (gp.getScreenWidth() / groundDecorGrass.getWidth()) + 2;
         for(int i = 0; i < numDecorTile; i++){
             decorImageList.add(new GroundImage(
-                    groundDecorGrass,
+                    getDecorImage(),
                     (i * groundDecorGrass.getWidth() * gp.getScale())
             ));
         }
@@ -95,5 +98,15 @@ public class Ground {
         }
 //        g2.drawImage(groundDecorGrass, 0, gp.getTileSize() * (gp.getMaxScreenRow()-3), groundDecorGrass.getWidth() * gp.getScale(), groundDecorGrass.getHeight()*gp.getScale(), null);
 //        g2.drawImage(groundDecorGrass, groundDecorGrass.getWidth(), gp.getTileSize() * (gp.getMaxScreenRow()-3), groundDecorGrass.getWidth() * gp.getScale(), groundDecorGrass.getHeight()*gp.getScale(), null);
+    }
+
+    private BufferedImage getDecorImage(){
+        int i = random.nextInt(100);
+        if(i < 80){ // 80% grass
+            return groundDecorGrass;
+        }
+        else{
+            return groundDecorFlower;
+        }
     }
 }
