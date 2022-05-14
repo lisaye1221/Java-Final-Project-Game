@@ -33,6 +33,9 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileManager = new TileManager(this);
     Ground groundGraphics = new Ground(this);
 
+    // metadata
+    double timer = 0;
+
     public GamePanel() {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         setBackground(new Color(145,240,255));
@@ -60,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
+            timer += ((currentTime - lastTime) / drawInterval) / FPS;
             lastTime = currentTime;
 
             if(delta >= 1) {
@@ -88,6 +92,7 @@ public class GamePanel extends JPanel implements Runnable {
         // tileManager.draw(g2);
         groundGraphics.draw(g2);
         player.draw(g2);
+        g2.drawString(Integer.toString((int)timer), 10, 10);
         // when drawing is done, dispose to save memory
         g2.dispose();
 
