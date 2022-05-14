@@ -2,6 +2,7 @@
 // main.GamePanel
 
 package main;
+import entity.Entity;
 import entity.Player;
 import graphicObject.Ground;
 import tile.TileManager;
@@ -23,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
     private Thread gameThread;
+    private final int GROUND_SCROLL_SPEED = 2;
 
     // graphics
     private TileManager tileManager = new TileManager(this);
@@ -33,11 +35,13 @@ public class GamePanel extends JPanel implements Runnable {
     EncounterManager encounterManager = new EncounterManager(this);
 
     // player
+    public final int PLAYER_X = 100;
     Player player = new Player(this, keyHandler);
 
     // game data
     public double timer = 0;
-    public int groundScrollSpeed = 2;
+    public int groundScrollSpeed = GROUND_SCROLL_SPEED;
+    public boolean isPaused = false;
 
 
     public GamePanel() {
@@ -90,6 +94,26 @@ public class GamePanel extends JPanel implements Runnable {
         groundGraphics.update();
         encounterManager.update();
         player.update();
+
+        // press X to unpause game(for testing)
+        if(keyHandler.cancelPressed){
+            encounterManager.hasPlayerInteracted = true;
+            encounterManager.shouldSpawnEncounter = true;
+            isPaused = false;
+
+            player.direction = Entity.Direction.RIGHT;
+        }
+
+        if(encounterManager.xForCollisionDetection <= PLAYER_X && !encounterManager.hasPlayerInteracted){
+            isPaused = true;
+            player.direction = Entity.Direction.UP;
+        }
+        if(isPaused){
+            groundScrollSpeed = 0;
+        }
+        else{
+            groundScrollSpeed = GROUND_SCROLL_SPEED;
+        }
 
     }
 

@@ -22,8 +22,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues(){
-        x = 100;
-        y = (gp.getMaxScreenRow()-3) * gp.getTileSize();
+        x = gp.PLAYER_X;
+        y = (gp.getMaxScreenRow()-3) * gp.getTileSize() + 8;
         speed = 4;
         direction = Direction.RIGHT;
     }
@@ -40,20 +40,6 @@ public class Player extends Entity {
     }
 
     public void update(){
-        // update player position
-        if(keyHandler.upPressed) {
-            y -= speed;
-        }
-        else if(keyHandler.downPressed){
-            y += speed;
-        }
-        else if(keyHandler.rightPressed){
-            x += speed;
-        }
-        else if(keyHandler.leftPressed){
-            x -= speed;
-        }
-
         spriteCounter++;
         if(spriteCounter > imageSpeedThreshold){
             spriteNum++;
@@ -62,6 +48,8 @@ public class Player extends Entity {
             }
             spriteCounter = 0;
         }
+
+
     }
     public void draw(Graphics2D g2){
 

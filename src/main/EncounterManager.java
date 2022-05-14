@@ -17,12 +17,16 @@ public class EncounterManager {
     private int spawnIntervalTime = 5;
     Encounter encounter = null;
     BufferedImage innImage, shopImage,eventImage;
+    BufferedImage encounterImage;
     int posX;
+    int xForCollisionDetection;
     boolean shouldSpawnEncounter = true;
+    boolean hasPlayerInteracted = true;
     double timer = 0;
 
     public EncounterManager(GamePanel gp){
         random = new Random();
+        posX = gp.getScreenWidth();
         this.gp = gp;
         getImages();
     }
@@ -38,6 +42,7 @@ public class EncounterManager {
     }
 
     public void spawnEncounter(){
+        hasPlayerInteracted = false;
         // generate a random encounter
         int i = random.nextInt(10);
         if(i < 4){
@@ -56,15 +61,18 @@ public class EncounterManager {
     void spawnShop(){
 
         encounter = Encounter.SHOP;
+        encounterImage = shopImage;
     }
 
     void spawnInn(){
 
         encounter = Encounter.INN;
+        encounterImage = innImage;
     }
 
     void spawnRandomEvent(){
         encounter = Encounter.EVENT;
+        encounterImage = eventImage;
     }
 
     public void update(){
@@ -74,46 +82,53 @@ public class EncounterManager {
             shouldSpawnEncounter = false;
             timer = 0;
         }
-        if(!shouldSpawnEncounter){
-            if(gp.keyHandler.confirmPressed){
-                shouldSpawnEncounter = true;
-                spawnIntervalTime = random.nextInt(4) + 3; // 3-6 seconds
+
+//        // press Z to spawn (for testing)
+//        if(!shouldSpawnEncounter){
+//            if(gp.keyHandler.confirmPressed){
+//                shouldSpawnEncounter = true;
+//                spawnIntervalTime = random.nextInt(4) + 3; // 3-6 seconds
+//            }
+//        }
+
+        if(encounter != null) {
+            posX -= gp.groundScrollSpeed;
+            switch (encounter) {
+                case INN:
+                    xForCollisionDetection = posX + encounterImage.getWidth() + 15;
+                    break;
+                case SHOP:
+                    xForCollisionDetection = posX + encounterImage.getWidth() + 15;
+                    break;
+                case EVENT:
+                    xForCollisionDetection = posX;
+                    break;
+
             }
         }
-
-        posX -= gp.groundScrollSpeed;
     }
 
     public void draw(Graphics2D g2){
         if(encounter != null) {
             switch (encounter) {
                 case INN:
-                    g2.drawImage(
-                            innImage,
-                            posX,
-                            (gp.getTileSize() * (gp.getMaxScreenRow() - 2)) - (innImage.getHeight() * gp.getScale()) + 15 ,
-                            innImage.getWidth() * gp.getScale(),
-                            innImage.getHeight() * gp.getScale(),
-                            null
-                    );
-                    break;
                 case SHOP:
                     g2.drawImage(
-                            shopImage,
+                            encounterImage,
                             posX,
-                            (gp.getTileSize() * (gp.getMaxScreenRow() - 2)) - (shopImage.getHeight() * gp.getScale()) + 15,
-                            shopImage.getWidth() * gp.getScale(),
-                            shopImage.getHeight() * gp.getScale(),
+                            (gp.getTileSize() * (gp.getMaxScreenRow() - 2)) - (encounterImage.getHeight() * gp.getScale()) + 15 ,
+                            encounterImage.getWidth() * gp.getScale(),
+                            encounterImage.getHeight() * gp.getScale(),
                             null
                     );
                     break;
                 case EVENT:
                     g2.drawImage(
-                            eventImage,
+                            encounterImage,
                             posX,
-                            (gp.getTileSize() * (gp.getMaxScreenRow() - 2)) - (eventImage.getHeight() * gp.getScale()),
-                            eventImage.getWidth() * gp.getScale(),
-                            eventImage.getHeight() * gp.getScale(),
+                            (gp.getTileSize() * (gp.getMaxScreenRow() - 2)) - (encounterImage.getHeight() * gp.getScale()),
+                            encounterImage.getWidth() * gp.getScale(),
+                            encounterImage.getHeight() * gp.getScale(),
                             null
                     );
                     break;
