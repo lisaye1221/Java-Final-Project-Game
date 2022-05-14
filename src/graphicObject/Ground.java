@@ -36,7 +36,7 @@ public class Ground {
         groundImageList = new ArrayList<>();
         decorImageList = new ArrayList<>();
         // calculate how many tile to fill across screen, add extra for filling in gap
-        int numGroundTile = (gp.getScreenWidth() / ground.getWidth()) + 2;
+        int numGroundTile = (gp.getScreenWidth() / (ground.getWidth()* gp.getScale())) + 2;
         for(int i = 0; i < numGroundTile; i++){
             groundImageList.add(new GroundImage(
                     ground,
@@ -44,11 +44,12 @@ public class Ground {
             ));
         }
         // do the same for decor
-        int numDecorTile = (gp.getScreenWidth() / groundDecorGrass.getWidth()) + 2;
+        int numDecorTile = (gp.getScreenWidth() / (groundDecorGrass.getWidth()* gp.getScale())) + 2;
         for(int i = 0; i < numDecorTile; i++){
+            BufferedImage newDecor = getDecorImage();
             decorImageList.add(new GroundImage(
-                    getDecorImage(),
-                    (i * groundDecorGrass.getWidth() * gp.getScale())
+                    newDecor,
+                    (i * newDecor.getWidth() * gp.getScale())
             ));
         }
     }
@@ -72,7 +73,7 @@ public class Ground {
         }
         GroundImage firstImage = groundImageList.get(0);
         if(firstImage.x + (firstImage.image.getWidth() * gp.getScale())< 0){
-            firstImage.x = groundImageList.get(groundImageList.size() - 1).x + firstImage.image.getWidth();
+            firstImage.x = groundImageList.get(groundImageList.size() - 1).x + (firstImage.image.getWidth() * gp.getScale());
             groundImageList.add(groundImageList.get(0));
             groundImageList.remove(0);
         }
@@ -82,7 +83,7 @@ public class Ground {
         }
         GroundImage decoFirstImage = decorImageList.get(0);
         if(decoFirstImage.x + (decoFirstImage.image.getWidth() * gp.getScale())< 0){
-            decoFirstImage.x = decorImageList.get(decorImageList.size() - 1).x + decoFirstImage.image.getWidth();
+            decoFirstImage.x = decorImageList.get(decorImageList.size() - 1).x + (decoFirstImage.image.getWidth() * gp.getScale());
             decorImageList.add(decorImageList.get(0));
             decorImageList.remove(0);
         }
@@ -101,8 +102,8 @@ public class Ground {
     }
 
     private BufferedImage getDecorImage(){
-        int i = random.nextInt(100);
-        if(i < 80){ // 80% grass
+        int i = random.nextInt(10);
+        if(i < 7){ // more grass
             return groundDecorGrass;
         }
         else{
