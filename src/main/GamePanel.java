@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Game Logic Managers
     KeyHandler keyHandler = new KeyHandler(this);
+    DatabaseManager databaseManager = new DatabaseManager();
     EncounterManager encounterManager = new EncounterManager(this);
     UI ui = new UI(this);
 
@@ -169,5 +170,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public int getTileSize(){
         return tileSize;
+    }
+
+    public void saveGame(){
+
+    }
+
+    public void loadGame(){
+        String username = "lisa";
+        String PIN = "1234";
     }
 }
