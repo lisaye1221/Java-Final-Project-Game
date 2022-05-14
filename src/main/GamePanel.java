@@ -22,19 +22,23 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenHeight = tileSize * maxScreenRow;
 
     int FPS = 60;
+    private Thread gameThread;
 
+    // graphics
+    private TileManager tileManager = new TileManager(this);
+    private Ground groundGraphics = new Ground(this);
+
+    // Game Logic Managers
     KeyHandler keyHandler = new KeyHandler();
-    Thread gameThread;
+    EncounterManager encounterManager = new EncounterManager(this);
 
     // player
     Player player = new Player(this, keyHandler);
 
-    // graphics
-    TileManager tileManager = new TileManager(this);
-    Ground groundGraphics = new Ground(this);
+    // game data
+    public double timer = 0;
+    public int groundScrollSpeed = 2;
 
-    // metadata
-    double timer = 0;
 
     public GamePanel() {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -63,7 +67,11 @@ public class GamePanel extends JPanel implements Runnable {
 
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
+            // increment all the timers
             timer += ((currentTime - lastTime) / drawInterval) / FPS;
+            if(encounterManager.shouldSpawnEncounter){
+                encounterManager.timer += ((currentTime - lastTime) / drawInterval) / FPS;
+            }
             lastTime = currentTime;
 
             if(delta >= 1) {
@@ -80,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void UPDATE(){
 
         groundGraphics.update();
+        encounterManager.update();
         player.update();
 
     }
@@ -91,8 +100,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         // tileManager.draw(g2);
         groundGraphics.draw(g2);
+        encounterManager.draw(g2);
         player.draw(g2);
+        // GUI
         g2.drawString(Integer.toString((int)timer), 10, 10);
+
         // when drawing is done, dispose to save memory
         g2.dispose();
 

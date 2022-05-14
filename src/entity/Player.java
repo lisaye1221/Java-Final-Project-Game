@@ -22,7 +22,7 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues(){
-        x = 80;
+        x = 100;
         y = (gp.getMaxScreenRow()-3) * gp.getTileSize();
         speed = 4;
         direction = Direction.RIGHT;

@@ -22,12 +22,11 @@ public class Ground {
     }
 
     GamePanel gp;
-    private ArrayList<GroundImage> groundImageList;
-    private ArrayList<GroundImage> decorImageList;
+    private final ArrayList<GroundImage> groundImageList;
+    private final ArrayList<GroundImage> decorImageList;
     private BufferedImage ground;
     private BufferedImage groundDecorGrass, groundDecorFlower;
-    int groundScrollSpeed = 2;
-    private Random random;
+    private final Random random;
 
     public Ground(GamePanel gp) {
         random = new Random();
@@ -69,7 +68,7 @@ public class Ground {
     public void update(){
         // ground
         for(GroundImage image: groundImageList){
-            image.x -= groundScrollSpeed;
+            image.x -= gp.groundScrollSpeed;
         }
         GroundImage firstImage = groundImageList.get(0);
         if(firstImage.x + (firstImage.image.getWidth() * gp.getScale())< 0){
@@ -79,7 +78,7 @@ public class Ground {
         }
         // ground decor
         for(GroundImage image: decorImageList){
-            image.x -= groundScrollSpeed;
+            image.x -= gp.groundScrollSpeed;
         }
         GroundImage decoFirstImage = decorImageList.get(0);
         if(decoFirstImage.x + (decoFirstImage.image.getWidth() * gp.getScale())< 0){
@@ -97,13 +96,11 @@ public class Ground {
         for(GroundImage image: decorImageList){
             g2.drawImage(image.image, image.x, gp.getTileSize() * (gp.getMaxScreenRow()-3), image.image.getWidth() * gp.getScale(), image.image.getHeight()*gp.getScale(), null);
         }
-//        g2.drawImage(groundDecorGrass, 0, gp.getTileSize() * (gp.getMaxScreenRow()-3), groundDecorGrass.getWidth() * gp.getScale(), groundDecorGrass.getHeight()*gp.getScale(), null);
-//        g2.drawImage(groundDecorGrass, groundDecorGrass.getWidth(), gp.getTileSize() * (gp.getMaxScreenRow()-3), groundDecorGrass.getWidth() * gp.getScale(), groundDecorGrass.getHeight()*gp.getScale(), null);
-    }
+  }
 
     private BufferedImage getDecorImage(){
         int i = random.nextInt(10);
-        if(i < 7){ // more grass
+        if(i < 7){ // more grass than flower
             return groundDecorGrass;
         }
         else{
