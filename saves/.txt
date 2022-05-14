@@ -1,3 +1,3 @@
-score 24
+score 431
 gold 0
 hunger 100

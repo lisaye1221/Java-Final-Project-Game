@@ -15,7 +15,7 @@ import java.io.PrintStream;
 
 public class GamePanel extends JPanel implements Runnable {
     public enum GameState{
-        TITLE, GAME_PLAY, GAME_OVER
+        TITLE, GAME_PLAY, GAME_PAUSE, GAME_OVER
     }
 
     // Screen settings
@@ -125,9 +125,11 @@ public class GamePanel extends JPanel implements Runnable {
                 player.direction = Entity.Direction.RIGHT;
             }
 
+            // reaches an encounter
             if (encounterManager.xForCollisionDetection <= PLAYER_X && !encounterManager.hasPlayerInteracted) {
                 isPaused = true;
                 player.direction = Entity.Direction.UP;
+                saveGame();
             }
             if (isPaused) {
                 groundScrollSpeed = 0;
@@ -190,12 +192,17 @@ public class GamePanel extends JPanel implements Runnable {
         String saveFileName;
         // if new game(don't know username)
         if(username == null && PIN == null) {
-            // TODO: pause game
+            gameState = GameState.GAME_PAUSE;
             // ask for username and PIN
             askForInfo();
+            if(username == null || PIN == null) {
+                System.out.println("Something went wrong with entering username/PIN");
+                return;
+            }
             // create file, save data to file
             saveFileName = username + PIN;
             //TODO: add entry to database
+            databaseManager.saveNewGameToDatabase(username, PIN, saveFileName);
         }
         // not new game
         else {

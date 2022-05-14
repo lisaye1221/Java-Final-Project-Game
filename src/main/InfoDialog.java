@@ -73,6 +73,7 @@ public class InfoDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 gp.setUsername(getUsername());
                 gp.setPIN(getPIN());
+                gp.gameState = GamePanel.GameState.GAME_PLAY;
                 dispose();
             }
         });
