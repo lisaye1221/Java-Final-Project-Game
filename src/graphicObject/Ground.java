@@ -26,7 +26,7 @@ public class Ground {
     private ArrayList<GroundImage> decorImageList;
     private BufferedImage ground;
     private BufferedImage groundDecorGrass, groundDecorFlower;
-    int groundScrollSpeed = 1;
+    int groundScrollSpeed = 2;
     private Random random;
 
     public Ground(GamePanel gp) {
