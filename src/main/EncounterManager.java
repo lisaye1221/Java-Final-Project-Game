@@ -14,7 +14,7 @@ public class EncounterManager {
 
     GamePanel gp;
     private final Random random;
-    private final int SPAWN_INTERVAL_TIME = 5;
+    private int spawnIntervalTime = 5;
     Encounter encounter = null;
     BufferedImage innImage, shopImage,eventImage;
     int posX;
@@ -68,7 +68,7 @@ public class EncounterManager {
     }
 
     public void update(){
-        if(timer >= SPAWN_INTERVAL_TIME && shouldSpawnEncounter){
+        if(timer >= spawnIntervalTime && shouldSpawnEncounter){
             spawnEncounter();
             // reset variables
             shouldSpawnEncounter = false;
@@ -77,6 +77,7 @@ public class EncounterManager {
         if(!shouldSpawnEncounter){
             if(gp.keyHandler.confirmPressed){
                 shouldSpawnEncounter = true;
+                spawnIntervalTime = random.nextInt(4) + 3; // 3-6 seconds
             }
         }
 
@@ -84,7 +85,6 @@ public class EncounterManager {
     }
 
     public void draw(Graphics2D g2){
-
         if(encounter != null) {
             switch (encounter) {
                 case INN:
