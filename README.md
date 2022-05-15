@@ -2,6 +2,9 @@
 
 ## Instructions
 
+**To Run:**
+Open in IntelliJ(or another IDE, I haven't tried), and run Main class located in main package.
+
 ### Database Create Table SQL
 
 Uses SQLite.
