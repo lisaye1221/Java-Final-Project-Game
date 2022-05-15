@@ -64,6 +64,30 @@ public class KeyHandler implements KeyListener {
                     }
                     break;
                 case SHOP:
+                    // buy bread
+                    if (key == KeyEvent.VK_1) {
+                        if(gp.gold >= gp.BREAD_BUY_PRICE){
+                            gp.gold -= gp.BREAD_BUY_PRICE;
+                            gp.bread++;
+                        }
+                    }
+                    // buy flower
+                    if (key == KeyEvent.VK_2) {
+                        if(gp.gold >= gp.FLOWER_BUY_PRICE){
+                            gp.gold -= gp.FLOWER_BUY_PRICE;
+                            gp.flower++;
+                        }
+                    }
+                    // sell flower
+                    if (key == KeyEvent.VK_3) {
+                        if(gp.flower > 0){
+                            gp.gold += gp.FLOWER_SELL_PRICE;
+                            gp.flower--;
+                        }
+                    }
+                    if (key == KeyEvent.VK_X) {
+                        gp.exitEncounter();
+                    }
                     break;
                 case EVENT:
                     if(gp.encounterManager.currEvent.isTransaction){

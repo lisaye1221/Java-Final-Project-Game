@@ -52,8 +52,11 @@ public class GamePanel extends JPanel implements Runnable {
     private String username = null;
     private String PIN = null;
     private final int GROUND_SCROLL_SPEED = 2;
-    private final int ENERGY_DEPLETION_RATE = 1;
+    private final double ENERGY_DEPLETION_RATE = 0.5;
     private final int BREAD_ENERGY = 15;
+    public final int BREAD_BUY_PRICE = 5;
+    public final int FLOWER_BUY_PRICE = 10;
+    public final int FLOWER_SELL_PRICE = 8;
     public int groundScrollSpeed = GROUND_SCROLL_SPEED;
     public boolean isPaused = false;
     public GameState gameState;

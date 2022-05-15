@@ -100,7 +100,7 @@ public class EncounterManager {
         else if(i < 45){
             // lose random amount of gold(gets robbed)
             int goldLost = 6 + random.nextInt(8);
-            text = "I lost "+ goldLost +" gold to some bandits.";
+            text = "bandits";
             gainItem = "";
             gainAmount = 0;
             loseItem = "gold";

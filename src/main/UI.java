@@ -60,6 +60,7 @@ public class UI {
                     drawInnPopUp();
                     break;
                 case SHOP:
+                    drawShopWindow();
                     break;
                 case EVENT:
                     drawEventDialogue(gp.encounterManager.currEvent);
@@ -107,7 +108,7 @@ public class UI {
     private void drawGUI(){
         // draw background box
         g2.setColor(GUI_BG_COLOR);
-        g2.fillRect(GUI_BG_X,GUI_BG_Y,240,180);
+        g2.fillRoundRect(GUI_BG_X,GUI_BG_Y,240,180, 10,10);
         // draw stats
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
         // energy bar
@@ -122,7 +123,7 @@ public class UI {
 
         // score and gold
         g2.setColor(Color.white);
-        g2.drawString("Score: " + ((int)gp.score), GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+55);
+        g2.drawString("Traveled: " + ((int)gp.score) +"m", GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+55);
         g2.drawString("Gold: " + gp.gold +"G", GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+80);
         // line separator
         g2.drawLine(GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+100, GUI_BG_X+GUI_X_PADDING + 200, GUI_BG_Y+100);
@@ -166,6 +167,22 @@ public class UI {
     }
 
     public void drawShopWindow(){
+        drawWindowBackground(POP_UP_X, POP_UP_Y, POP_UP_WIDTH, POP_UP_HEIGHT);
+
+        String prompt = "Shop";
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+        g2.drawString(prompt, getXForCenteredText(prompt), POP_UP_Y + gp.getTileSize() - 10);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 16F));
+        prompt = "[Press 1] Buy Bread (-"+gp.BREAD_BUY_PRICE+"G)";
+        g2.drawString(prompt, getXForCenteredText(prompt), POP_UP_Y + gp.getTileSize() + 30);
+        prompt = "[Press 2] Buy Flower (-"+gp.FLOWER_BUY_PRICE+"G)";
+        g2.drawString(prompt, getXForCenteredText(prompt), POP_UP_Y + gp.getTileSize() + 60);
+        prompt = "[Press 3] Sell Flower (+"+gp.FLOWER_SELL_PRICE+"G)";
+        g2.drawString(prompt, getXForCenteredText(prompt), POP_UP_Y + gp.getTileSize() + 90);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 16F));
+        g2.drawString("[Press X] Exit", POP_UP_X + (gp.getTileSize()*7) - (gp.getTileSize() / 2), POP_UP_Y + (gp.getTileSize()*3) + 20);
 
     }
 
