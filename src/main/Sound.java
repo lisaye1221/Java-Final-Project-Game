@@ -8,14 +8,16 @@ import java.net.URL;
 public class Sound {
 
     Clip clip;
-    URL soundURL[] = new URL[10];
+    URL[] soundURL = new URL[10];
 
     public static final int TITLE_BGM = 0;
     public static final int MAIN_BGM = 1;
+    public static final int EAT_SFX = 2;
 
     public Sound(){
         soundURL[0] = getClass().getResource("/res_audio/the_cafe.wav");
         soundURL[1] = getClass().getResource("/res_audio/supermart.wav");
+        soundURL[2] = getClass().getResource("/res_audio/eat.wav");
     }
 
     public void setFile(int i){

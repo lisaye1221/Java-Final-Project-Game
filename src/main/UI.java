@@ -101,7 +101,7 @@ public class UI {
         g2.drawLine(GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+100, GUI_BG_X+GUI_X_PADDING + 200, GUI_BG_Y+100);
         // draw items
         g2.drawImage(breadSprite, GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+130-ITEM_ICON_SIZE+5, ITEM_ICON_SIZE, ITEM_ICON_SIZE, null);
-        g2.drawString("Bread: x" + (gp.bread), GUI_BG_X+GUI_X_PADDING+ITEM_ICON_SIZE+5, GUI_BG_Y+130);
+        g2.drawString("Bread: x" + (gp.bread) + " [E]", GUI_BG_X+GUI_X_PADDING+ITEM_ICON_SIZE+5, GUI_BG_Y+130);
         g2.drawImage(flowerSprite, GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+155-ITEM_ICON_SIZE+5, ITEM_ICON_SIZE, ITEM_ICON_SIZE, null);
         g2.drawString("Flower: x" + (gp.flower), GUI_BG_X+GUI_X_PADDING+ITEM_ICON_SIZE+5, GUI_BG_Y+155);
 

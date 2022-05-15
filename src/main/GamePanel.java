@@ -30,8 +30,6 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenHeight = tileSize * maxScreenRow;
 
     double FPS = 60;
-    private final int GROUND_SCROLL_SPEED = 2;
-    private final int ENERGY_DEPLETION_RATE = 1;
 
     // graphics
     private TileManager tileManager = new TileManager(this);
@@ -49,9 +47,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PLAYER_X = 100;
     Player player = new Player(this, keyHandler);
 
-    // game data
+    // game data & stats
     private String username = null;
     private String PIN = null;
+    private final int GROUND_SCROLL_SPEED = 2;
+    private final int ENERGY_DEPLETION_RATE = 1;
+    private final int BREAD_ENERGY = 5;
     public int groundScrollSpeed = GROUND_SCROLL_SPEED;
     public boolean isPaused = false;
     public GameState gameState;
@@ -59,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     public double timer = 0;
     public int gold = 0;
     public double energy = 100;
-    public int bread = 0;
+    public int bread = 1;
     public int flower = 0;
 
     public GamePanel(JFrame jf) {
@@ -209,6 +210,13 @@ public class GamePanel extends JPanel implements Runnable {
         sound.play();
     }
 
+    public void eatBread(){
+        if(bread > 0) {
+            playSFX(Sound.EAT_SFX);
+            bread--;
+            energy += BREAD_ENERGY;
+        }
+    }
 
     public void saveGame(){
         String saveFileName;
