@@ -2,10 +2,7 @@
 // main.GamePanel
 
 package main;
-import entity.Entity;
-import entity.Player;
 import graphicObject.Ground;
-import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -36,7 +32,6 @@ public class GamePanel extends JPanel implements Runnable {
     double FPS = 60;
 
     // graphics
-    private TileManager tileManager = new TileManager(this);
     private Ground groundGraphics = new Ground(this);
 
     // SYSTEM
@@ -56,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     private String username = null;
     private String PIN = null;
     private final int GROUND_SCROLL_SPEED = 2;
-    private final double ENERGY_DEPLETION_RATE = 0.5;
+     private final double ENERGY_DEPLETION_RATE = 0.5;
     private final int BREAD_ENERGY = 15;
     public final int BREAD_BUY_PRICE = 5;
     public final int FLOWER_BUY_PRICE = 10;
@@ -83,7 +78,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void setupGame(){
         gameState = GameState.TITLE;
-        playMusic(Sound.TITLE_BGM);
     }
 
     public void startGameThread() {
@@ -130,6 +124,12 @@ public class GamePanel extends JPanel implements Runnable {
             encounterManager.update();
             player.update();
 
+            // game over
+            if(energy <= 0){
+                gameState = GameState.GAME_OVER;
+                stopMusic(Sound.MAIN_BGM);
+            }
+
             // gain score, lose energy
             score += 1/ FPS;
             energy -= (ENERGY_DEPLETION_RATE / FPS);
@@ -137,7 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
             // reaches an encounter
             if (encounterManager.xForCollisionDetection <= PLAYER_X && !encounterManager.hasPlayerInteracted) {
                 isPaused = true;
-                player.direction = Entity.Direction.UP;
+                player.direction = Player.Direction.UP;
                 // do the corresponding stuff
                 switch(encounterManager.encounter){
                     case INN:
@@ -241,7 +241,7 @@ public class GamePanel extends JPanel implements Runnable {
         encounterManager.shouldSpawnEncounter = true;
         isPaused = false;
         gameState = GameState.GAME_PLAY;
-        player.direction = Entity.Direction.RIGHT;
+        player.direction = Player.Direction.RIGHT;
     }
 
     public void saveGame(){

@@ -1,13 +1,19 @@
-package entity;
-
-import main.*;
+package main;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Player extends Entity {
+public class Player {
+    public enum Direction{
+        UP, RIGHT;
+    }
+    public int x,y;
+    public int speed;
+    public Direction direction;
+    public int spriteCounter = 0;
+    public int spriteNum = 0;
 
     GamePanel gp;
     KeyHandler keyHandler;

@@ -36,16 +36,14 @@ public class KeyHandler implements KeyListener {
             if (key == KeyEvent.VK_ENTER) {
                 // new game
                 if(gp.ui.titleOptionPos == 0){
-                    gp.stopMusic(Sound.TITLE_BGM);
-                    gp.playMusic(Sound.MAIN_BGM);
                     gp.gameState = GamePanel.GameState.GAME_PLAY;
+                    gp.playMusic(Sound.MAIN_BGM);
                 }
                 // load game
                 else{
                     gp.loadGame();
-                    gp.stopMusic(Sound.TITLE_BGM);
-                    gp.playMusic(Sound.MAIN_BGM);
                     gp.gameState = GamePanel.GameState.GAME_PLAY;
+                    gp.playMusic(Sound.MAIN_BGM);
                 }
             }
         }

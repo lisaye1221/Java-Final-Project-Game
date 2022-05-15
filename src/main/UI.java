@@ -67,6 +67,14 @@ public class UI {
                     break;
             }
         }
+        if(gp.gameState == GamePanel.GameState.GAME_OVER){
+            g2.setColor(Color.white);
+            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
+            String gameOverPrompt = "Game Over";
+            g2.drawString(gameOverPrompt, getXForCenteredText(gameOverPrompt), gp.getScreenHeight() / 2);
+            gameOverPrompt = "Your journey lasted " + (int)gp.score + "m";
+            g2.drawString(gameOverPrompt, getXForCenteredText(gameOverPrompt), gp.getScreenHeight() / 2 + 60);
+        }
 
     }
 
