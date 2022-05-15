@@ -20,10 +20,22 @@ public class UI {
     private BufferedImage breadSprite;
     private BufferedImage flowerSprite;
 
+    public String currentDialogue;
+    private final int POP_UP_X;
+    private final int POP_UP_Y;
+    private final int POP_UP_WIDTH;
+    private final int POP_UP_HEIGHT;
+
     public int titleOptionPos = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
+
+        POP_UP_X = gp.getTileSize() * 3;
+        POP_UP_Y = gp.getTileSize() * 4;
+        POP_UP_WIDTH = gp.getScreenWidth() - (gp.getTileSize() * 6);
+        POP_UP_HEIGHT = gp.tileSize * 4;
+
         try{
             breadSprite = ImageIO.read(getClass().getResource("../res_tiles/bread.png"));
             flowerSprite = ImageIO.read(getClass().getResource("../res_tiles/flower.png"));
@@ -39,8 +51,20 @@ public class UI {
         if(gp.gameState == GamePanel.GameState.TITLE){
             drawTitleScreen();
         }
-        else{
+        if(gp.gameState == GamePanel.GameState.GAME_PLAY || gp.gameState == GamePanel.GameState.GAME_PAUSE || gp.gameState == GamePanel.GameState.ENCOUNTER_STATE){
             drawGUI();
+        }
+        if(gp.gameState == GamePanel.GameState.ENCOUNTER_STATE){
+            switch(gp.encounterManager.encounter){
+                case INN:
+                    drawInnPopUp();
+                    break;
+                case SHOP:
+                    break;
+                case EVENT:
+                    drawEventDialogue(gp.encounterManager.currEvent);
+                    break;
+            }
         }
 
     }
@@ -83,28 +107,74 @@ public class UI {
     private void drawGUI(){
         // draw background box
         g2.setColor(GUI_BG_COLOR);
-        g2.fillRect(GUI_BG_X,GUI_BG_Y,250,180);
+        g2.fillRect(GUI_BG_X,GUI_BG_Y,240,180);
         // draw stats
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
         // energy bar
         g2.setColor(Color.white);
         g2.drawString("Energy", GUI_BG_X + GUI_X_PADDING, GUI_BG_Y + 25 );
         g2.setColor(ENERGY_BAR_COLOR);
-        g2.drawRect(GUI_BG_X + GUI_X_PADDING + 70, GUI_BG_Y + 20 - (ENERGY_BAR_HEIGHT / 2), ENERGY_BAR_WIDTH, ENERGY_BAR_HEIGHT);
         g2.fillRect(GUI_BG_X + GUI_X_PADDING + 70, GUI_BG_Y + 20 - (ENERGY_BAR_HEIGHT / 2), (int)Math.round(gp.energy), ENERGY_BAR_HEIGHT);
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRect(GUI_BG_X + GUI_X_PADDING + 70, GUI_BG_Y + 20 - (ENERGY_BAR_HEIGHT / 2), ENERGY_BAR_WIDTH, ENERGY_BAR_HEIGHT);
+
 
         // score and gold
         g2.setColor(Color.white);
-        g2.drawString("Score: " + ((int)gp.timer), GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+55);
+        g2.drawString("Score: " + ((int)gp.score), GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+55);
         g2.drawString("Gold: " + gp.gold, GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+80);
         // line separator
         g2.drawLine(GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+100, GUI_BG_X+GUI_X_PADDING + 200, GUI_BG_Y+100);
         // draw items
         g2.drawImage(breadSprite, GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+130-ITEM_ICON_SIZE+5, ITEM_ICON_SIZE, ITEM_ICON_SIZE, null);
-        g2.drawString("Bread: x" + (gp.bread) + " [E]", GUI_BG_X+GUI_X_PADDING+ITEM_ICON_SIZE+5, GUI_BG_Y+130);
+        g2.drawString("Bread: x" + (gp.bread) + " [Press E]", GUI_BG_X+GUI_X_PADDING+ITEM_ICON_SIZE+5, GUI_BG_Y+130);
         g2.drawImage(flowerSprite, GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+155-ITEM_ICON_SIZE+5, ITEM_ICON_SIZE, ITEM_ICON_SIZE, null);
         g2.drawString("Flower: x" + (gp.flower), GUI_BG_X+GUI_X_PADDING+ITEM_ICON_SIZE+5, GUI_BG_Y+155);
 
+    }
+
+    public void drawEventDialogue(EncounterManager.Event event){
+        // background
+        drawWindowBackground(POP_UP_X, POP_UP_Y, POP_UP_WIDTH, POP_UP_HEIGHT);
+
+        // draw text
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
+        g2.drawString(event.text, getXForCenteredText(event.text), POP_UP_Y + gp.tileSize);
+
+        // draw controls
+        if(event.isTransaction){
+            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
+            g2.drawString("[Press Z] Accept", POP_UP_X + gp.getTileSize(), POP_UP_Y + (gp.getTileSize()*3) );
+            g2.drawString("[Press X] Decline", POP_UP_X + (gp.getTileSize()*7) - (gp.getTileSize() / 2), POP_UP_Y + (gp.getTileSize()*3));
+        }
+        else{
+            String prompt = "[Press Z or X] Move On";
+            g2.drawString("[Press Z or X] Move On", getXForCenteredText(prompt), POP_UP_Y + (gp.getTileSize()*3) );
+        }
+    }
+
+    public void drawInnPopUp(){
+        drawWindowBackground(POP_UP_X, POP_UP_Y, POP_UP_WIDTH, POP_UP_HEIGHT);
+
+        String prompt = "Should I rest here and save my game?";
+        // draw text
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
+        g2.drawString(prompt, getXForCenteredText(prompt), POP_UP_Y + gp.getTileSize());
+        g2.drawString("[Press Z] Yes", POP_UP_X + gp.getTileSize(), POP_UP_Y + (gp.getTileSize()*3) );
+        g2.drawString("[Press X] No", POP_UP_X + (gp.getTileSize()*7) - (gp.getTileSize() / 2), POP_UP_Y + (gp.getTileSize()*3));
+    }
+
+    public void drawShopWindow(){
+
+    }
+
+    private void drawWindowBackground(int x, int y, int width, int height){
+        g2.setColor(new Color(0,0,0,210));
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
     }
 
     public int getXForCenteredText(String text){

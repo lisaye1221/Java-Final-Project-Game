@@ -12,10 +12,11 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
     public enum GameState{
-        TITLE, GAME_PLAY, GAME_PAUSE, GAME_OVER
+        TITLE, GAME_PLAY, GAME_PAUSE, ENCOUNTER_STATE, GAME_OVER
     }
 
     // Screen settings
@@ -52,16 +53,17 @@ public class GamePanel extends JPanel implements Runnable {
     private String PIN = null;
     private final int GROUND_SCROLL_SPEED = 2;
     private final int ENERGY_DEPLETION_RATE = 1;
-    private final int BREAD_ENERGY = 5;
+    private final int BREAD_ENERGY = 15;
     public int groundScrollSpeed = GROUND_SCROLL_SPEED;
     public boolean isPaused = false;
     public GameState gameState;
     // game stats
     public double timer = 0;
+    public double score = 0;
     public int gold = 0;
     public double energy = 100;
-    public int bread = 1;
-    public int flower = 0;
+    public int bread = 2;
+    public int flower = 1;
 
     public GamePanel(JFrame jf) {
         this.ownerJF = jf;
@@ -116,29 +118,30 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void UPDATE(){
-
         if(gameState == GameState.GAME_PLAY) {
             groundGraphics.update();
             encounterManager.update();
             player.update();
 
-            // decrease energy
+            // gain score, lose energy
+            score += 1/ FPS;
             energy -= (ENERGY_DEPLETION_RATE / FPS);
-
-            // press X to unpause game(for testing)
-            if (keyHandler.cancelPressed) {
-                encounterManager.hasPlayerInteracted = true;
-                encounterManager.shouldSpawnEncounter = true;
-                isPaused = false;
-
-                player.direction = Entity.Direction.RIGHT;
-            }
 
             // reaches an encounter
             if (encounterManager.xForCollisionDetection <= PLAYER_X && !encounterManager.hasPlayerInteracted) {
                 isPaused = true;
                 player.direction = Entity.Direction.UP;
-                saveGame();
+                // do the corresponding stuff
+                switch(encounterManager.encounter){
+                    case INN:
+                        break;
+                    case EVENT:
+                        encounterManager.generateEvent();
+                        break;
+                    case SHOP:
+                        break;
+                }
+                gameState = GameState.ENCOUNTER_STATE;
             }
             if (isPaused) {
                 groundScrollSpeed = 0;
@@ -155,14 +158,10 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         // Title
-        if(gameState == GameState.TITLE){
-            //
-        }
-        else{
+        if(gameState != GameState.TITLE){
             groundGraphics.draw(g2);
             encounterManager.draw(g2);
             player.draw(g2);
-
         }
         ui.draw(g2);
         // when drawing is done, dispose to save memory
@@ -218,6 +217,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public void exitEncounter(){
+        encounterManager.hasPlayerInteracted = true;
+        encounterManager.shouldSpawnEncounter = true;
+        isPaused = false;
+        gameState = GameState.GAME_PLAY;
+        player.direction = Entity.Direction.RIGHT;
+    }
+
     public void saveGame(){
         String saveFileName;
         // if new game(don't know username)
@@ -231,7 +238,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
             // create file, save data to file
             saveFileName = username + PIN;
-            //TODO: add entry to database
             databaseManager.saveNewGameToDatabase(username, PIN, saveFileName);
         }
         // not new game
@@ -243,11 +249,6 @@ public class GamePanel extends JPanel implements Runnable {
         saveToSaveFile(saveFileName);
     }
 
-    public void loadGame(){
-        String username = "lisa";
-        String PIN = "1234";
-    }
-
     public void askForInfo(){
         InfoDialog infoDialog = new InfoDialog(ownerJF, this);
         infoDialog.setVisible(true);
@@ -256,11 +257,26 @@ public class GamePanel extends JPanel implements Runnable {
     private void saveToSaveFile(String fileName){
         try {
             PrintStream fout = new PrintStream("./saves/" + fileName + ".txt");
-            fout.println("score " + (int) timer);
+            fout.println("score " + (int) score);
             fout.println("gold " + gold);
             fout.println("energy " + energy);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    // called from title screen
+    public void loadGame(){
+        askForInfo();
+        if(username != null && PIN != null){
+            String saveFileName = databaseManager.getSaveFileNameFromDatabase(username, PIN);
+            if(!saveFileName.equals("")){
+                // use filename to get file
+
+                // read each line of file to get game info
+
+                // load game
+            }
         }
     }
 

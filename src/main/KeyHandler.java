@@ -45,23 +45,46 @@ public class KeyHandler implements KeyListener {
             }
         }
         else if(gp.gameState == GamePanel.GameState.GAME_PLAY) {
-            if (key == KeyEvent.VK_UP) {
-                upPressed = true;
-            }
-            if (key == KeyEvent.VK_DOWN) {
-                downPressed = true;
-            }
-            if (key == KeyEvent.VK_LEFT) {
-                leftPressed = true;
-            }
-            if (key == KeyEvent.VK_RIGHT) {
-                rightPressed = true;
-            }
             if (key == KeyEvent.VK_Z) {
                 confirmPressed = true;
             }
             if (key == KeyEvent.VK_X) {
                 cancelPressed = true;
+            }
+            if (key == KeyEvent.VK_E) {
+                gp.eatBread();
+            }
+        }
+        else if(gp.gameState == GamePanel.GameState.ENCOUNTER_STATE){
+            switch(gp.encounterManager.encounter){
+                case INN:
+                    if (key == KeyEvent.VK_Z) {
+                        gp.saveGame();
+                        gp.exitEncounter();
+                    }
+                    break;
+                case SHOP:
+                    break;
+                case EVENT:
+                    if(gp.encounterManager.currEvent.isTransaction){
+                        if (key == KeyEvent.VK_Z) {
+                            gp.encounterManager.handleTransactionEvent(gp.encounterManager.currEvent);
+                            gp.exitEncounter();
+                        }
+                        if (key == KeyEvent.VK_X) {
+                            gp.exitEncounter();
+                        }
+                    }
+                    else{
+                        if (key == KeyEvent.VK_Z || key == KeyEvent.VK_X) {
+                            gp.encounterManager.handleEvent(gp.encounterManager.currEvent);
+                            gp.exitEncounter();
+                        }
+                    }
+                    break;
+            }
+            if (key == KeyEvent.VK_X) {
+                gp.exitEncounter();
             }
             if (key == KeyEvent.VK_E) {
                 gp.eatBread();

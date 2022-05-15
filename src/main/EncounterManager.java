@@ -12,6 +12,24 @@ public class EncounterManager {
         INN, SHOP, EVENT
     }
 
+    class Event{
+        String text;
+        String gainItem;
+        int gainAmount;
+        String loseItem;
+        int loseAmount;
+        boolean isTransaction;
+
+        public Event(String text, String gainItem, int gainAmount, String loseItem, int loseAmount, boolean isTransaction){
+            this.text = text;
+            this.gainItem = gainItem;
+            this.gainAmount = gainAmount;
+            this.loseItem = loseItem;
+            this.loseAmount = loseAmount;
+            this.isTransaction = isTransaction;
+        }
+    }
+
     GamePanel gp;
     private final Random random;
     private int spawnIntervalTime = 5;
@@ -23,6 +41,7 @@ public class EncounterManager {
     boolean shouldSpawnEncounter = true;
     boolean hasPlayerInteracted = true;
     double timer = 0;
+    Event currEvent= null;
 
     public EncounterManager(GamePanel gp){
         random = new Random();
@@ -45,10 +64,10 @@ public class EncounterManager {
         hasPlayerInteracted = false;
         // generate a random encounter
         int i = random.nextInt(10);
-        if(i < 4){
+        if(i < 6){
             spawnRandomEvent();
         }
-        else if(i < 7){
+        else if(i < 8){
             spawnShop();
         }
         else{
@@ -57,6 +76,114 @@ public class EncounterManager {
         // set x pos to spawn
         posX = gp.getScreenWidth();
     }
+
+    public void generateEvent(){
+        int i = random.nextInt(100);
+
+        String text;
+        String gainItem;
+        int gainAmount;
+        String loseItem;
+        int loseAmount;
+        boolean isTransaction;
+
+        if(i < 35){
+            // gain random amount of gold
+            int goldGained = 8 + random.nextInt(6);
+            text = "I found "+ goldGained +" gold on the grass!";
+            gainItem = "gold";
+            gainAmount = goldGained;
+            loseItem = "";
+            loseAmount = 0;
+            isTransaction = false;
+        }
+        else if(i < 45){
+            // lose random amount of gold(gets robbed)
+            int goldLost = 6 + random.nextInt(8);
+            text = "I lost "+ goldLost +" gold to some bandits.";
+            gainItem = "";
+            gainAmount = 0;
+            loseItem = "gold";
+            loseAmount = goldLost;
+            isTransaction = false;
+        }
+        else if(i < 60){
+            // gain a flower
+            text = "A fairy gave me a flower!";
+            gainItem = "flower";
+            gainAmount = 1;
+            loseItem = "";
+            loseAmount = 0;
+            isTransaction = false;
+        }
+        else if(i < 70){
+            // somebody ask for flower in exchange for bread
+            text = "Somebody wants to trade their bread for my flower.";
+            gainItem = "bread";
+            gainAmount = 1;
+            loseItem = "flower";
+            loseAmount = 1;
+            isTransaction = true;
+        }
+        else if(i < 90){
+            // somebody ask for flower in exchange for gold
+            int price = 10 + random.nextInt(6);
+            text = "Somebody wants to buy a flower from me for " + price + " gold.";
+            gainItem = "gold";
+            gainAmount = price;
+            loseItem = "flower";
+            loseAmount = 1;
+            isTransaction = true;
+        }
+        else{
+            // gain a bread
+            text = "Somebody left a bread here, lucky me!";
+            gainItem = "bread";
+            gainAmount = 1;
+            loseItem = "";
+            loseAmount = 0;
+            isTransaction = false;
+        }
+
+        currEvent = new Event(text, gainItem, gainAmount, loseItem, loseAmount, isTransaction);
+    }
+
+    public void handleEvent(Event event){
+        if(event.gainItem.equals("gold")){
+            gp.gold += event.gainAmount;
+        }
+        if(event.gainItem.equals("flower")){
+            gp.flower += event.gainAmount;
+        }
+        if(event.gainItem.equals("bread")){
+            gp.bread += event.gainAmount;
+        }
+        if(event.loseItem.equals("gold")){
+            gp.gold -= event.loseAmount;
+            if(gp.gold < 0) {
+                gp.gold = 0;
+            }
+        }
+        if(event.loseItem.equals("flower")){
+            gp.flower -= event.loseAmount;
+        }
+
+    }
+
+    public void handleTransactionEvent(Event event){
+        if(event.loseItem.equals("flower")){
+            if(gp.flower < event.loseAmount){
+                return;
+            }
+        }
+        if(event.loseItem.equals("gold")){
+            if(gp.gold < event.loseAmount){
+                return;
+            }
+        }
+        handleEvent(event);
+    }
+
 
     void spawnShop(){
 
@@ -82,14 +209,6 @@ public class EncounterManager {
             shouldSpawnEncounter = false;
             timer = 0;
         }
-
-//        // press Z to spawn (for testing)
-//        if(!shouldSpawnEncounter){
-//            if(gp.keyHandler.confirmPressed){
-//                shouldSpawnEncounter = true;
-//                spawnIntervalTime = random.nextInt(4) + 3; // 3-6 seconds
-//            }
-//        }
 
         if(encounter != null) {
             posX -= gp.groundScrollSpeed;
