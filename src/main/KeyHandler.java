@@ -35,12 +35,15 @@ public class KeyHandler implements KeyListener {
                 // new game
                 if(gp.ui.titleOptionPos == 0){
                     gp.stopMusic(Sound.TITLE_BGM);
-                    // gp.playMusic(Sound.MAIN_BGM);
+                    gp.playMusic(Sound.MAIN_BGM);
                     gp.gameState = GamePanel.GameState.GAME_PLAY;
                 }
                 // load game
                 else{
-                    // add later
+                    gp.loadGame();
+                    gp.stopMusic(Sound.TITLE_BGM);
+                    gp.playMusic(Sound.MAIN_BGM);
+                    gp.gameState = GamePanel.GameState.GAME_PLAY;
                 }
             }
         }

@@ -147,7 +147,7 @@ public class UI {
         if(event.isTransaction){
             g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
             g2.drawString("[Press Z] Accept", POP_UP_X + gp.getTileSize(), POP_UP_Y + (gp.getTileSize()*3) );
-            g2.drawString("[Press X] Decline", POP_UP_X + (gp.getTileSize()*7) - (gp.getTileSize() / 2), POP_UP_Y + (gp.getTileSize()*3));
+            g2.drawString("[Press X] Decline", POP_UP_X + (gp.getTileSize()*7) - (gp.getTileSize() / 2), POP_UP_Y + (gp.getTileSize()*2));
         }
         else{
             String prompt = "[Press Z or X] Move On";

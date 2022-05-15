@@ -10,9 +10,12 @@ import tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class GamePanel extends JPanel implements Runnable {
     public enum GameState{
@@ -43,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     Sound sound = new Sound();
     UI ui = new UI(this);
     private Thread gameThread;
+    public boolean isLoadGame = false;
 
     // player
     public final int PLAYER_X = 100;
@@ -272,9 +276,11 @@ public class GamePanel extends JPanel implements Runnable {
     private void saveToSaveFile(String fileName){
         try {
             PrintStream fout = new PrintStream("./saves/" + fileName + ".txt");
-            fout.println("score " + (int) score);
-            fout.println("gold " + gold);
-            fout.println("energy " + energy);
+            fout.println("score," + (int) score);
+            fout.println("gold," + gold);
+            fout.println("energy," + energy);
+            fout.println("bread," + bread);
+            fout.println("flower," + flower);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -282,16 +288,42 @@ public class GamePanel extends JPanel implements Runnable {
 
     // called from title screen
     public void loadGame(){
+        isLoadGame = true;
         askForInfo();
         if(username != null && PIN != null){
             String saveFileName = databaseManager.getSaveFileNameFromDatabase(username, PIN);
             if(!saveFileName.equals("")){
-                // use filename to get file
+                try {
+                    // use filename to get file
+                    Scanner fin = new Scanner(new File("./saves/" + saveFileName + ".txt"));
+                    // read each line of file to get game info
+                    ArrayList<String> gameData = new ArrayList<>();
+                    while (fin.hasNext()) {
+                        gameData.add(fin.next().split(",")[1]);
+                    }
+                    double score_load = Double.parseDouble(gameData.get(0));
+                    int gold_load = Integer.parseInt(gameData.get(1));
+                    double energy_load = Double.parseDouble(gameData.get(2));
+                    int bread_load = Integer.parseInt(gameData.get(3));
+                    int flower_load = Integer.parseInt(gameData.get(4));
 
-                // read each line of file to get game info
-
-                // load game
+                    score = score_load;
+                    gold = gold_load;
+                    energy = energy_load;
+                    bread = bread_load;
+                    flower = flower_load;
+                    // load game
+                }
+                catch(FileNotFoundException e){
+                    System.out.println("File cannot be found");
+                }
             }
+            else{
+                System.out.println("No savefile found");
+            }
+        }
+        else{
+            System.out.println("could not get username or PIN");
         }
     }
 
