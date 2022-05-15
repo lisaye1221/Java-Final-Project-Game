@@ -137,6 +137,18 @@ public class GamePanel extends JPanel implements Runnable {
                         break;
                     case EVENT:
                         encounterManager.generateEvent();
+                        if(encounterManager.currEvent.text.equals("bandits")){
+                            int goldLost = encounterManager.currEvent.loseAmount;
+                            if(gold > goldLost){
+                                encounterManager.currEvent.text = "I lost "+ goldLost +" gold to some bandits.";
+                            }
+                            else if(gold == goldLost){
+                                encounterManager.currEvent.text = "I lost "+ goldLost +" gold to some bandits. I have nothing left.";
+                            }
+                            else{
+                                encounterManager.currEvent.text = "I encountered some bandits. But I had no gold on me to lose.";
+                            }
+                        }
                         break;
                     case SHOP:
                         break;

@@ -123,7 +123,7 @@ public class UI {
         // score and gold
         g2.setColor(Color.white);
         g2.drawString("Score: " + ((int)gp.score), GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+55);
-        g2.drawString("Gold: " + gp.gold, GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+80);
+        g2.drawString("Gold: " + gp.gold +"G", GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+80);
         // line separator
         g2.drawLine(GUI_BG_X+GUI_X_PADDING, GUI_BG_Y+100, GUI_BG_X+GUI_X_PADDING + 200, GUI_BG_Y+100);
         // draw items
