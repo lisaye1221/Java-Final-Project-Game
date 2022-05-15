@@ -19,6 +19,7 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
+        // TITLE
         if(gp.gameState == GamePanel.GameState.TITLE){
             if (key == KeyEvent.VK_UP) {
                 gp.ui.titleOptionPos--;
@@ -33,6 +34,8 @@ public class KeyHandler implements KeyListener {
             if (key == KeyEvent.VK_ENTER) {
                 // new game
                 if(gp.ui.titleOptionPos == 0){
+                    gp.stopMusic(Sound.TITLE_BGM);
+                    // gp.playMusic(Sound.MAIN_BGM);
                     gp.gameState = GamePanel.GameState.GAME_PLAY;
                 }
                 // load game

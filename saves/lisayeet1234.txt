@@ -1,3 +1,0 @@
-score 24
-gold 0
-hunger 100

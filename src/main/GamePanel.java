@@ -29,19 +29,21 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
 
-    int FPS = 60;
-    private Thread gameThread;
+    double FPS = 60;
     private final int GROUND_SCROLL_SPEED = 2;
+    private final int ENERGY_DEPLETION_RATE = 1;
 
     // graphics
     private TileManager tileManager = new TileManager(this);
     private Ground groundGraphics = new Ground(this);
 
-    // Game Logic Managers
+    // SYSTEM
     KeyHandler keyHandler = new KeyHandler(this);
     DatabaseManager databaseManager = new DatabaseManager();
     EncounterManager encounterManager = new EncounterManager(this);
+    Sound sound = new Sound();
     UI ui = new UI(this);
+    private Thread gameThread;
 
     // player
     public final int PLAYER_X = 100;
@@ -56,7 +58,9 @@ public class GamePanel extends JPanel implements Runnable {
     // game stats
     public double timer = 0;
     public int gold = 0;
-    public int hunger = 100;
+    public double energy = 100;
+    public int bread = 0;
+    public int flower = 0;
 
     public GamePanel(JFrame jf) {
         this.ownerJF = jf;
@@ -69,6 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void setupGame(){
         gameState = GameState.TITLE;
+        playMusic(Sound.TITLE_BGM);
     }
 
     public void startGameThread() {
@@ -116,6 +121,9 @@ public class GamePanel extends JPanel implements Runnable {
             encounterManager.update();
             player.update();
 
+            // decrease energy
+            energy -= (ENERGY_DEPLETION_RATE / FPS);
+
             // press X to unpause game(for testing)
             if (keyHandler.cancelPressed) {
                 encounterManager.hasPlayerInteracted = true;
@@ -147,16 +155,15 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Title
         if(gameState == GameState.TITLE){
-            ui.draw(g2);
+            //
         }
         else{
             groundGraphics.draw(g2);
             encounterManager.draw(g2);
             player.draw(g2);
-            // GUI
-            g2.drawString(Integer.toString((int)timer), 10, 10);
-        }
 
+        }
+        ui.draw(g2);
         // when drawing is done, dispose to save memory
         g2.dispose();
 
@@ -187,6 +194,21 @@ public class GamePanel extends JPanel implements Runnable {
     public void setPIN(String PIN){
         this.PIN = PIN;
     }
+
+    // audio related
+    public void playMusic(int i ){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+    public void stopMusic(int i){
+        sound.stop();
+    }
+    public void playSFX(int i){
+        sound.setFile(i);
+        sound.play();
+    }
+
 
     public void saveGame(){
         String saveFileName;
@@ -228,7 +250,7 @@ public class GamePanel extends JPanel implements Runnable {
             PrintStream fout = new PrintStream("./saves/" + fileName + ".txt");
             fout.println("score " + (int) timer);
             fout.println("gold " + gold);
-            fout.println("hunger " + hunger);
+            fout.println("energy " + energy);
         } catch (IOException e) {
             e.printStackTrace();
         }

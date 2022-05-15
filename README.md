@@ -1,5 +1,24 @@
 # A Simple Journey
 
+## Instructions
+
+### Database Create Table SQL
+
+`CREATE TABLE "player" (
+"username"	varchar(25),
+"PIN"	char(4),
+"file_name"	varchar(50)
+);`
+
+
+
+## Controls
+
+`Enter` - choose option in title
+
+`Z` - confirm
+
+`X` - cancel
 
 ## Credits
 - Tutorial by @RyiSnow on Java 2D Games
