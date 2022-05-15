@@ -140,8 +140,13 @@ public class UI {
         drawWindowBackground(POP_UP_X, POP_UP_Y, POP_UP_WIDTH, POP_UP_HEIGHT);
 
         // draw text
+        int y = POP_UP_Y + gp.tileSize;
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
-        g2.drawString(event.text, getXForCenteredText(event.text), POP_UP_Y + gp.tileSize);
+        for(String line : event.text.split("\n")){
+            g2.drawString(line, getXForCenteredText(line), y);
+            y += 30;
+        }
+
 
         // draw controls
         if(event.isTransaction){

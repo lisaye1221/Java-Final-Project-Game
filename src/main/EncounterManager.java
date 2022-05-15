@@ -118,7 +118,7 @@ public class EncounterManager {
         }
         else if(i < 70){
             // somebody ask for flower in exchange for bread
-            text = "Somebody wants to trade their bread for my flower.";
+            text = "Somebody wants to trade their bread \n for my flower.";
             gainItem = "bread";
             gainAmount = 1;
             loseItem = "flower";
@@ -128,7 +128,7 @@ public class EncounterManager {
         else if(i < 90){
             // somebody ask for flower in exchange for gold
             int price = 10 + random.nextInt(6);
-            text = "Somebody wants to buy a flower from me for " + price + " gold.";
+            text = "Somebody wants to buy a flower from me \n for " + price + " gold.";
             gainItem = "gold";
             gainAmount = price;
             loseItem = "flower";

@@ -22,12 +22,14 @@ public class KeyHandler implements KeyListener {
         // TITLE
         if(gp.gameState == GamePanel.GameState.TITLE){
             if (key == KeyEvent.VK_UP) {
+                gp.playSFX(Sound.CURSOR_SFX);
                 gp.ui.titleOptionPos--;
                 if(gp.ui.titleOptionPos < 0) {
                     gp.ui.titleOptionPos = 1;
                 }
             }
             if (key == KeyEvent.VK_DOWN) {
+                gp.playSFX(Sound.CURSOR_SFX);
                 gp.ui.titleOptionPos++;
                 gp.ui.titleOptionPos %= 2;
             }
@@ -48,12 +50,6 @@ public class KeyHandler implements KeyListener {
             }
         }
         else if(gp.gameState == GamePanel.GameState.GAME_PLAY) {
-            if (key == KeyEvent.VK_Z) {
-                confirmPressed = true;
-            }
-            if (key == KeyEvent.VK_X) {
-                cancelPressed = true;
-            }
             if (key == KeyEvent.VK_E) {
                 gp.eatBread();
             }
@@ -62,6 +58,7 @@ public class KeyHandler implements KeyListener {
             switch(gp.encounterManager.encounter){
                 case INN:
                     if (key == KeyEvent.VK_Z) {
+                        gp.playSFX(Sound.KEY_SFX);
                         gp.saveGame();
                         gp.exitEncounter();
                     }
@@ -70,6 +67,7 @@ public class KeyHandler implements KeyListener {
                     // buy bread
                     if (key == KeyEvent.VK_1) {
                         if(gp.gold >= gp.BREAD_BUY_PRICE){
+                            gp.playSFX(Sound.TRANSACTION_SFX);
                             gp.gold -= gp.BREAD_BUY_PRICE;
                             gp.bread++;
                         }
@@ -77,6 +75,7 @@ public class KeyHandler implements KeyListener {
                     // buy flower
                     if (key == KeyEvent.VK_2) {
                         if(gp.gold >= gp.FLOWER_BUY_PRICE){
+                            gp.playSFX(Sound.TRANSACTION_SFX);
                             gp.gold -= gp.FLOWER_BUY_PRICE;
                             gp.flower++;
                         }
@@ -84,26 +83,31 @@ public class KeyHandler implements KeyListener {
                     // sell flower
                     if (key == KeyEvent.VK_3) {
                         if(gp.flower > 0){
+                            gp.playSFX(Sound.TRANSACTION_SFX);
                             gp.gold += gp.FLOWER_SELL_PRICE;
                             gp.flower--;
                         }
                     }
                     if (key == KeyEvent.VK_X) {
+                        gp.playSFX(Sound.KEY_SFX);
                         gp.exitEncounter();
                     }
                     break;
                 case EVENT:
                     if(gp.encounterManager.currEvent.isTransaction){
                         if (key == KeyEvent.VK_Z) {
+                            gp.playSFX(Sound.KEY_SFX);
                             gp.encounterManager.handleTransactionEvent(gp.encounterManager.currEvent);
                             gp.exitEncounter();
                         }
                         if (key == KeyEvent.VK_X) {
+                            gp.playSFX(Sound.KEY_SFX);
                             gp.exitEncounter();
                         }
                     }
                     else{
                         if (key == KeyEvent.VK_Z || key == KeyEvent.VK_X) {
+                            gp.playSFX(Sound.KEY_SFX);
                             gp.encounterManager.handleEvent(gp.encounterManager.currEvent);
                             gp.exitEncounter();
                         }
@@ -111,6 +115,7 @@ public class KeyHandler implements KeyListener {
                     break;
             }
             if (key == KeyEvent.VK_X) {
+                gp.playSFX(Sound.KEY_SFX);
                 gp.exitEncounter();
             }
             if (key == KeyEvent.VK_E) {
