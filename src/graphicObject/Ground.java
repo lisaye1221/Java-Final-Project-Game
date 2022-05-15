@@ -24,6 +24,7 @@ public class Ground {
     GamePanel gp;
     private final ArrayList<GroundImage> groundImageList;
     private final ArrayList<GroundImage> decorImageList;
+    private BufferedImage bg;
     private BufferedImage ground;
     private BufferedImage groundDecorGrass, groundDecorFlower;
     private final Random random;
@@ -59,6 +60,7 @@ public class Ground {
             ground = ImageIO.read(getClass().getResourceAsStream("../res_tiles/ground.png"));
             groundDecorGrass = ImageIO.read(getClass().getResourceAsStream("../res_tiles/ground_decor_grass.png"));
             groundDecorFlower = ImageIO.read(getClass().getResourceAsStream("../res_tiles/ground_decor_flower.png"));
+            bg = ImageIO.read(getClass().getResourceAsStream("../res_tiles/bg.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,6 +91,7 @@ public class Ground {
     }
 
     public void draw(Graphics2D g2){
+        g2.drawImage(bg, 0, gp.getTileSize() * 2, bg.getWidth(), bg.getHeight(), null);
         for(GroundImage image: groundImageList){
             g2.drawImage(image.image, image.x, gp.getTileSize() * (gp.getMaxScreenRow()-2), image.image.getWidth() * gp.getScale(), image.image.getHeight()*gp.getScale(), null);
         }

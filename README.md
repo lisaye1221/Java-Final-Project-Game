@@ -47,6 +47,8 @@ Creative Commons Attribution-ShareAlike 3.0 Unported License (CC BY-SA 3.0).
 
 [Platform2D PixelArt](https://madrex.itch.io/platform2d-pixelart)
 
+[Eden Platforms](https://zipix.itch.io/eden-platforms)
+
 [Casual Game Music Pack Vol 2](https://zakiro101.itch.io/free-casual-game-music-pack-vol-2)
 
 [Sprout Lands Asset Pack](https://cupnooble.itch.io/sprout-lands-asset-pack)

@@ -2,6 +2,7 @@
 // main.GamePanel
 
 package main;
+import graphicObject.Cloud;
 import graphicObject.Ground;
 
 import javax.swing.*;
@@ -32,7 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     double FPS = 60;
 
     // graphics
-    private Ground groundGraphics = new Ground(this);
+    private final Ground groundGraphics = new Ground(this);
+    private final Cloud cloudGraphics = new Cloud(this);
 
     // SYSTEM
     KeyHandler keyHandler = new KeyHandler(this);
@@ -62,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
     // game stats
     public double timer = 0;
     public double score = 0;
-    public int gold = 0;
+    public int gold = 10;
     public double energy = 100;
     public int bread = 2;
     public int flower = 1;
@@ -149,11 +151,13 @@ public class GamePanel extends JPanel implements Runnable {
                             if(gold > goldLost){
                                 encounterManager.currEvent.text = "I lost "+ goldLost +" gold to some bandits.";
                             }
-                            else if(gold == goldLost){
-                                encounterManager.currEvent.text = "I lost "+ goldLost +" gold to some bandits.\n I have nothing left.";
-                            }
                             else{
-                                encounterManager.currEvent.text = "I encountered some bandits.\n But I had no gold on me to lose.";
+                                if(gold == 0){
+                                    encounterManager.currEvent.text = "I lost "+ goldLost +" gold to some bandits.\n I have nothing left.";
+                                }
+                                else {
+                                    encounterManager.currEvent.text = "I encountered some bandits.\n But I had no gold on me to lose.";
+                                }
                             }
                         }
                         break;
@@ -168,7 +172,7 @@ public class GamePanel extends JPanel implements Runnable {
                 groundScrollSpeed = GROUND_SCROLL_SPEED;
             }
         } // end of GAME_PLAY
-
+        cloudGraphics.update();
     }
 
     // DRAW
@@ -182,6 +186,7 @@ public class GamePanel extends JPanel implements Runnable {
             encounterManager.draw(g2);
             player.draw(g2);
         }
+        cloudGraphics.draw(g2);
         ui.draw(g2);
         // when drawing is done, dispose to save memory
         g2.dispose();
