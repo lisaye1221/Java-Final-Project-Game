@@ -20,7 +20,10 @@ public class UI {
     private BufferedImage breadSprite;
     private BufferedImage flowerSprite;
 
-    public String currentDialogue;
+    public boolean messageOn = false;
+    public String message = "";
+    int messageCounter = 0;
+    int MESSAGE_DURATION = 3;
     private final int POP_UP_X;
     private final int POP_UP_Y;
     private final int POP_UP_WIDTH;
@@ -74,6 +77,18 @@ public class UI {
             g2.drawString(gameOverPrompt, getXForCenteredText(gameOverPrompt), gp.getScreenHeight() / 2);
             gameOverPrompt = "Your journey lasted " + (int)gp.score + "m";
             g2.drawString(gameOverPrompt, getXForCenteredText(gameOverPrompt), gp.getScreenHeight() / 2 + 60);
+        }
+        // draw notification
+        if(messageOn){
+            g2.setColor(Color.black);
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+            g2.drawString(message, gp.getTileSize() * 6, gp.getTileSize() * 1);
+
+            messageCounter++;
+            if(messageCounter > MESSAGE_DURATION * gp.FPS){
+                messageCounter = 0;
+                messageOn = false;
+            }
         }
 
     }
@@ -205,6 +220,11 @@ public class UI {
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
+    }
+
+    public void showMessage(String text){
+        message = text;
+        messageOn = true;
     }
 
     public int getXForCenteredText(String text){

@@ -16,6 +16,7 @@ public class Sound {
     public static final int KEY_SFX = 3;
     public static final int CURSOR_SFX = 4;
     public static final int TRANSACTION_SFX = 5;
+    public static final int ERROR_SFX = 6;
 
     public Sound(){
         soundURL[0] = getClass().getResource("/res_audio/the_cafe.wav");
@@ -24,6 +25,7 @@ public class Sound {
         soundURL[3] = getClass().getResource("/res_audio/key.wav");
         soundURL[4] = getClass().getResource("/res_audio/cursor.wav");
         soundURL[5] = getClass().getResource("/res_audio/transaction.wav");
+        soundURL[6] = getClass().getResource("/res_audio/error.wav");
     }
 
     public void setFile(int i){

@@ -153,10 +153,10 @@ public class GamePanel extends JPanel implements Runnable {
                             }
                             else{
                                 if(gold == 0){
-                                    encounterManager.currEvent.text = "I lost "+ goldLost +" gold to some bandits.\n I have nothing left.";
+                                    encounterManager.currEvent.text = "I encountered some bandits.\n But I had no gold on me to lose.";
                                 }
                                 else {
-                                    encounterManager.currEvent.text = "I encountered some bandits.\n But I had no gold on me to lose.";
+                                    encounterManager.currEvent.text = "I lost "+ gold +" gold to some bandits.\n I have nothing left.";
                                 }
                             }
                         }
@@ -258,6 +258,7 @@ public class GamePanel extends JPanel implements Runnable {
             askForInfo();
             if(username == null || PIN == null) {
                 System.out.println("Something went wrong with entering username/PIN");
+                ui.showMessage("Something went wrong with saving.");
                 return;
             }
             // create file, save data to file
@@ -287,6 +288,7 @@ public class GamePanel extends JPanel implements Runnable {
             fout.println("bread," + bread);
             fout.println("flower," + flower);
         } catch (IOException e) {
+            ui.showMessage("Something went wrong with saving.");
             e.printStackTrace();
         }
     }
@@ -325,6 +327,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             else{
                 System.out.println("No savefile found");
+                ui.showMessage("No Save File Found. Starting New Game.");
             }
         }
         else{

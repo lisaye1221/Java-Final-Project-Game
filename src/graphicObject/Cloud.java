@@ -70,7 +70,7 @@ public class Cloud {
 
     public void draw(Graphics2D g2){
         for(CloudImage image: cloudImageList){
-            g2.drawImage(image.image, image.x, 0, image.image.getWidth() * gp.getScale(), image.image.getHeight()*gp.getScale(), null);
+            g2.drawImage(image.image, image.x, -10, image.image.getWidth() * gp.getScale(), image.image.getHeight()*gp.getScale(), null);
         }
     }
 

@@ -69,6 +69,10 @@ public class KeyHandler implements KeyListener {
                             gp.gold -= gp.BREAD_BUY_PRICE;
                             gp.bread++;
                         }
+                        else{
+                            gp.playSFX(Sound.ERROR_SFX);
+                            gp.ui.showMessage("I don't have enough gold.");
+                        }
                     }
                     // buy flower
                     if (key == KeyEvent.VK_2) {
@@ -77,6 +81,10 @@ public class KeyHandler implements KeyListener {
                             gp.gold -= gp.FLOWER_BUY_PRICE;
                             gp.flower++;
                         }
+                        else{
+                            gp.playSFX(Sound.ERROR_SFX);
+                            gp.ui.showMessage("I don't have enough gold.");
+                        }
                     }
                     // sell flower
                     if (key == KeyEvent.VK_3) {
@@ -84,6 +92,10 @@ public class KeyHandler implements KeyListener {
                             gp.playSFX(Sound.TRANSACTION_SFX);
                             gp.gold += gp.FLOWER_SELL_PRICE;
                             gp.flower--;
+                        }
+                        else{
+                            gp.playSFX(Sound.ERROR_SFX);
+                            gp.ui.showMessage("I don't have flowers.");
                         }
                     }
                     if (key == KeyEvent.VK_X) {
@@ -94,7 +106,6 @@ public class KeyHandler implements KeyListener {
                 case EVENT:
                     if(gp.encounterManager.currEvent.isTransaction){
                         if (key == KeyEvent.VK_Z) {
-                            gp.playSFX(Sound.KEY_SFX);
                             gp.encounterManager.handleTransactionEvent(gp.encounterManager.currEvent);
                             gp.exitEncounter();
                         }

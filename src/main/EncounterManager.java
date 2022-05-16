@@ -173,14 +173,19 @@ public class EncounterManager {
     public void handleTransactionEvent(Event event){
         if(event.loseItem.equals("flower")){
             if(gp.flower < event.loseAmount){
+                gp.playSFX(Sound.ERROR_SFX);
+                gp.ui.showMessage("I don't have any flower.");
                 return;
             }
         }
         if(event.loseItem.equals("gold")){
             if(gp.gold < event.loseAmount){
+                gp.playSFX(Sound.ERROR_SFX);
+                gp.ui.showMessage("I don't have enough gold.");
                 return;
             }
         }
+        gp.playSFX(Sound.KEY_SFX);
         handleEvent(event);
     }
 
