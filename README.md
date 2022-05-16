@@ -1,5 +1,13 @@
 # A Simple Journey
 
+You are on a continuous journey.
+
+During your journey, you will encounter random events, shops, and inn.
+
+Use the green shop to buy/sell stuff, use the blue inn to save your game.
+
+Your energy will drop as time passes, eat bread to keep it up, or else it's game over.
+
 ## Instructions
 
 **To Run:**
