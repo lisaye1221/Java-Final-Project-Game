@@ -238,6 +238,8 @@ public class GamePanel extends JPanel implements Runnable {
             playSFX(Sound.EAT_SFX);
             bread--;
             energy += BREAD_ENERGY;
+            if(energy > 100) { energy = 100; }
+            ui.showMessage("Delicious bread! [+"+BREAD_ENERGY+" energy]");
         }
     }
 

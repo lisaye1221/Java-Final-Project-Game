@@ -1,5 +1,5 @@
-score,75
-gold,30
-energy,76.87499999996966
+score,27
+gold,10
+energy,96.93333333333089
 bread,2
 flower,1
